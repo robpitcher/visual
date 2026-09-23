@@ -44,9 +44,9 @@ export const USER_BUDGETS = [
 ] as const;
 
 export const METERED_ORDER = [
-  { level: 'Cost center budget', note: 'if set' },
-  { level: 'Organization budget', note: 'if set' },
-  { level: 'Enterprise spending limit', note: '' },
+  { level: 'Cost center budget', note: 'if in one' },
+  { level: 'Organization budget', note: 'license org' },
+  { level: 'Enterprise budget', note: 'otherwise' },
 ] as const;
 
 export const credits = (plan: Plan, seats: number) => plan.creditsPerSeat * seats;
@@ -64,5 +64,6 @@ export function maxBillUsd(plan: Plan, seats = TOTAL_SEATS, budget = ENTERPRISE_
 
 export const SOURCES = [
   { title: 'Usage-based billing for organizations and enterprises', url: 'https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises' },
-  { title: 'Budgets for usage-based billing', url: 'https://docs.github.com/en/billing/concepts/budgets-and-alerts' },
+  { title: 'Budgets for usage-based billing', url: 'https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets' },
+  { title: 'Budgets and alerts', url: 'https://docs.github.com/en/billing/concepts/budgets-and-alerts' },
 ];

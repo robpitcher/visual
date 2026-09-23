@@ -115,7 +115,7 @@
               </p>
             </div>
           {:else}
-            <p>First budget that applies pays:</p>
+            <p>Charged to the first budget that matches:</p>
             <ol class="metered-list" aria-label="Metered budget order">
               {#each METERED_ORDER as item, meteredIndex}
                 <li class:primary={meteredIndex === 0}>
@@ -124,6 +124,9 @@
                 </li>
               {/each}
             </ol>
+            <p class="metered-note">
+              The enterprise budget still counts it (unless excluded). Tightest budget blocks first.
+            </p>
             <p class="outcome bad">
               <span class="outcome-mark" aria-hidden="true">✕</span>
               <span class="outcome-text">“Stop usage” at limit → blocked</span>
@@ -494,9 +497,17 @@
   }
 
   .metered-list span {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
     color: var(--muted);
     font-size: 0.78rem;
+    text-align: right;
+  }
+
+  .metered-note {
+    margin: 0.8rem 0 1rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .policy-note {
@@ -745,6 +756,7 @@
 
     .metered-list span {
       align-self: flex-start;
+      text-align: left;
     }
 
     .check-card {
