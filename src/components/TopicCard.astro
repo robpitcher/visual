@@ -13,7 +13,7 @@ interface Props {
 const { href, title, summary, category, badge, art } = Astro.props;
 ---
 
-<a class="topic-card card" href={href}>
+<a class="topic-card card" href={href} data-category={category}>
   <span class="topic-card__art">
     {art === 'billing' ? <BillingArt /> : <span class="fallback-art" aria-hidden="true"></span>}
   </span>
@@ -35,6 +35,10 @@ const { href, title, summary, category, badge, art } = Astro.props;
       transform var(--dur) var(--ease),
       border-color var(--dur) var(--ease),
       box-shadow var(--dur) var(--ease);
+  }
+
+  .topic-card[hidden] {
+    display: none;
   }
 
   .topic-card:hover {

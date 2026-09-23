@@ -47,7 +47,7 @@ const pageTitle = title === 'Visual Aids' ? title : `${title} · Visual Aids`;
       <main id="main-content" class="site-main">
         <slot />
       </main>
-      <SearchModal client:idle />
+      <SearchModal client:load />
     </div>
     <script is:inline>
       (() => {

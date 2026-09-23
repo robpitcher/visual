@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { COST_CENTERS, PLANS, TOTAL_SEATS, credits, fmt, usd, type PlanId } from './data';
+  import { COST_CENTERS, CREDIT_USD, PLANS, TOTAL_SEATS, credits, fmt, usd, type PlanId } from './data';
 
   interface Props {
     initialPlan?: PlanId;
@@ -15,7 +15,7 @@
 
   const plan = $derived(PLANS[planId]);
   const totalCredits = $derived(credits(plan, TOTAL_SEATS));
-  const includedUsageUsd = $derived(totalCredits * 0.01);
+  const includedUsageUsd = $derived(totalCredits * CREDIT_USD);
   const state = $derived(capsOn ? 'caps' : costCentersOn ? 'cost-centers' : 'pool');
 
   const costCenterViews = $derived(

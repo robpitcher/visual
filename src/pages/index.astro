@@ -15,9 +15,11 @@ const categories = [...new Set(topics.map((topic) => topic.data.category))];
     <p class="home-hero__subtitle">Interactive diagrams that explain cloud, AI and developer tooling concepts — one idea per visual.</p>
 
     {categories.length > 1 && (
-      <div class="home-filters" aria-label="Filter by category">
-        <button class="chip is-active" type="button" aria-pressed="true">All topics</button>
-        {categories.map((category) => <button class="chip" type="button" aria-pressed="false">{category}</button>)}
+      <div class="home-filters" role="group" aria-label="Filter by category" data-category-filters>
+        <button class="chip" type="button" aria-pressed="true" data-filter="">All topics</button>
+        {categories.map((category) => (
+          <button class="chip" type="button" aria-pressed="false" data-filter={category}>{category}</button>
+        ))}
       </div>
     )}
 
@@ -35,6 +37,20 @@ const categories = [...new Set(topics.map((topic) => topic.data.category))];
     </div>
   </section>
 </Base>
+
+<script>
+  const filters = document.querySelector('[data-category-filters]');
+  const buttons = filters ? [...filters.querySelectorAll<HTMLButtonElement>('[data-filter]')] : [];
+  const cards = [...document.querySelectorAll<HTMLElement>('.topic-grid [data-category]')];
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.filter ?? '';
+      for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
+      for (const card of cards) card.hidden = selected !== '' && card.dataset.category !== selected;
+    });
+  }
+</script>
 
 <style>
   .home-hero {
