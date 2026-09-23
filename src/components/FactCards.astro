@@ -1,0 +1,21 @@
+---
+interface Fact {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  cards: Fact[];
+}
+
+const { cards } = Astro.props;
+---
+
+<div class="fact-grid" aria-label="Key facts">
+  {cards.map((card) => (
+    <div class="fact-card">
+      <span class="fact-card__label">{card.label}</span>
+      <strong class="fact-card__value">{card.value}</strong>
+    </div>
+  ))}
+</div>

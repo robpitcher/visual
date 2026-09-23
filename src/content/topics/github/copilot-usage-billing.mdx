@@ -1,0 +1,49 @@
+---
+title: "How Copilot usage-based billing works"
+shortTitle: "Copilot usage-based billing"
+navTitle: "Copilot usage billing"
+category: "GitHub"
+summary: "Seats → AI credits → pools & budgets."
+badge: "New"
+art: "billing"
+breadcrumb:
+  - "GitHub"
+  - "Copilot"
+  - "Usage-based billing"
+updated: 2026-09-22
+---
+
+import FactCards from '/src/components/FactCards.astro';
+import SeatPool from '/src/components/billing/SeatPool.svelte';
+import BudgetLayers from '/src/components/billing/BudgetLayers.svelte';
+import { SOURCES } from '/src/components/billing/data';
+
+Every Copilot seat comes with AI credits. Credits are pooled across the enterprise — then cost centers and budgets decide who can use what.
+
+<FactCards
+  cards={[
+    { label: '1 AI credit', value: '= $0.01' },
+    { label: 'Business · $19/seat', value: '→ 1,900 credits' },
+    { label: 'Enterprise · $39/seat', value: '→ 3,900 credits' },
+    { label: 'Pool resets on the 1st', value: 'no rollover' },
+  ]}
+/>
+
+<SeatPool client:visible />
+
+<BudgetLayers client:visible />
+
+## Good to know
+
+- Code completions and next edit suggestions don't consume AI credits.
+- Paid usage is on by default via the "AI credits paid usage" policy.
+- User-level budgets are always a hard stop.
+
+<footer class="sources">
+  <h2>Sources</h2>
+  <ul>
+    {SOURCES.map((source) => (
+      <li><a href={source.url}>{source.title}</a></li>
+    ))}
+  </ul>
+</footer>

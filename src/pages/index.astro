@@ -1,4 +1,93 @@
 ---
-const t: string = 'Visual Aids';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import TopicCard from '../components/TopicCard.astro';
+import { withBase } from '../lib/url';
+
+const topics = (await getCollection('topics')).sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+const categories = [...new Set(topics.map((topic) => topic.data.category))];
 ---
-<html lang="en"><head><meta charset="utf-8" /><title>{t}</title></head><body><h1>{t}</h1></body></html>
+
+<Base title="Visual Aids" description="Interactive diagrams that explain cloud, AI and developer tooling concepts — one idea per visual.">
+  <section class="content-frame home-hero" aria-labelledby="home-title">
+    <p class="eyebrow">Visual Aids · A living wiki</p>
+    <h1 id="home-title">Complex topics, drawn simply.</h1>
+    <p class="home-hero__subtitle">Interactive diagrams that explain cloud, AI and developer tooling concepts — one idea per visual.</p>
+
+    {categories.length > 1 && (
+      <div class="home-filters" aria-label="Filter by category">
+        <button class="chip is-active" type="button" aria-pressed="true">All topics</button>
+        {categories.map((category) => <button class="chip" type="button" aria-pressed="false">{category}</button>)}
+      </div>
+    )}
+
+    <div class="topic-grid">
+      {topics.map((topic) => (
+        <TopicCard
+          href={withBase(`/${topic.id}/`)}
+          title={topic.data.shortTitle ?? topic.data.title}
+          summary={topic.data.summary}
+          category={topic.data.category}
+          badge={topic.data.badge}
+          art={topic.data.art}
+        />
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .home-hero {
+    padding-top: 88px;
+  }
+
+  h1 {
+    max-width: 980px;
+    margin-top: 22px;
+    color: var(--text);
+    font-size: clamp(2.6rem, 5.6vw, 4.25rem);
+    font-weight: 760;
+    letter-spacing: -0.038em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .home-hero__subtitle {
+    max-width: 920px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: clamp(1.06rem, 2vw, 1.35rem);
+    line-height: 1.45;
+  }
+
+  .home-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 42px;
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  @media (max-width: 1180px) {
+    .topic-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .home-hero {
+      padding-top: 40px;
+    }
+
+    .topic-grid {
+      grid-template-columns: 1fr;
+      margin-top: 42px;
+    }
+  }
+</style>
