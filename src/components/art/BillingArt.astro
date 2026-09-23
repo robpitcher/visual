@@ -1,0 +1,120 @@
+<div class="billing-art" aria-hidden="true">
+  <div class="people">
+    {Array.from({ length: 6 }).map((_, index) => <span class={`person person--${index % 3}`}></span>)}
+  </div>
+  <svg class="arrow" viewBox="0 0 46 16">
+    <path d="M1 8h35"></path>
+    <path d="m30 2 8 6-8 6"></path>
+  </svg>
+  <div class="pool">
+    <span class="pool__row pool__row--top"></span>
+    <span class="pool__row pool__row--mid"></span>
+    <span class="pool__row pool__row--thin"></span>
+  </div>
+</div>
+
+<style>
+  .billing-art {
+    width: min(100%, 286px);
+    height: 120px;
+    display: grid;
+    grid-template-columns: minmax(96px, 1fr) 34px 82px;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 4%, 14px);
+  }
+
+  .people {
+    display: grid;
+    grid-template-columns: repeat(3, 20px);
+    justify-content: center;
+    gap: 14px clamp(10px, 12%, 18px);
+  }
+
+  .person {
+    position: relative;
+    width: 20px;
+    height: 28px;
+  }
+
+  .person::before,
+  .person::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--person-color);
+  }
+
+  .person::before {
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  .person::after {
+    bottom: 0;
+    width: 18px;
+    height: 12px;
+    border-radius: 12px 12px 2px 2px;
+  }
+
+  .person--0 {
+    --person-color: var(--cc-0);
+  }
+
+  .person--1 {
+    --person-color: var(--cc-2);
+  }
+
+  .person--2 {
+    --person-color: var(--cc-1);
+  }
+
+  .arrow {
+    width: 34px;
+    height: 16px;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pool {
+    display: grid;
+    gap: 5px;
+    width: 82px;
+    padding: 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+  }
+
+  .pool__row {
+    display: block;
+    border-radius: 3px;
+  }
+
+  .pool__row--top {
+    height: 44px;
+    background: linear-gradient(135deg, var(--cc-0), color-mix(in srgb, var(--cc-0) 72%, var(--accent-2)));
+  }
+
+  .pool__row--mid {
+    height: 22px;
+    background: linear-gradient(135deg, var(--cc-1), color-mix(in srgb, var(--cc-1) 66%, var(--accent)));
+  }
+
+  .pool__row--thin {
+    height: 5px;
+    background: var(--cc-2);
+  }
+
+  @media (max-width: 420px) {
+    .billing-art {
+      width: min(100%, 260px);
+      grid-template-columns: minmax(86px, 1fr) 30px 76px;
+    }
+  }
+</style>

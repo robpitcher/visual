@@ -1,0 +1,101 @@
+---
+import BillingArt from './art/BillingArt.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  category: string;
+  badge?: string;
+  art?: 'billing';
+}
+
+const { href, title, summary, category, badge, art } = Astro.props;
+---
+
+<a class="topic-card card" href={href} data-category={category}>
+  <span class="topic-card__art">
+    {art === 'billing' ? <BillingArt /> : <span class="fallback-art" aria-hidden="true"></span>}
+  </span>
+  <span class="topic-card__meta">
+    <span class="eyebrow">{category}</span>
+    {badge && <span class="topic-card__badge">{badge}</span>}
+  </span>
+  <span class="topic-card__title">{title}</span>
+  <span class="topic-card__summary">{summary}</span>
+</a>
+
+<style>
+  .topic-card {
+    display: block;
+    min-height: 250px;
+    padding: 16px 20px 20px;
+    overflow: hidden;
+    transition:
+      transform var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+
+  .topic-card[hidden] {
+    display: none;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow), 0 18px 55px color-mix(in srgb, var(--accent) 13%, transparent);
+  }
+
+  .topic-card__art {
+    display: grid;
+    place-items: center;
+    min-height: 120px;
+    margin-bottom: 24px;
+    border-radius: 11px;
+    background: var(--surface-2);
+  }
+
+  .topic-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 24px;
+  }
+
+  .topic-card__badge {
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-2);
+    color: var(--on-accent);
+    font-size: 0.78rem;
+    font-weight: 780;
+    line-height: 1;
+  }
+
+  .topic-card__title {
+    display: block;
+    margin-top: 10px;
+    color: var(--text);
+    font-size: 1.08rem;
+    font-weight: 780;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .topic-card__summary {
+    display: block;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.94rem;
+  }
+
+  .fallback-art {
+    width: 58%;
+    height: 54px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+  }
+</style>

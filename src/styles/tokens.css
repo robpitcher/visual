@@ -1,0 +1,74 @@
+/* Theme A "Midnight Glass" (blue). Values mirror the approved mockups. */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0a0e19;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-2: rgba(255, 255, 255, 0.07);
+  --surface-solid: #121726;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #e9edf6;
+  --muted: #8d97ad;
+  --faint: #3a4358;
+  --accent: #3b82f6;
+  --accent-2: #22d3ee;
+  --on-accent: #ffffff;
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --cc-0: #3b82f6;
+  --cc-1: #2dd4bf;
+  --cc-2: #f472b6;
+  --ok: #34d399;
+  --bad: #f87171;
+  --warn: #fbbf24;
+  --glow-1: rgba(29, 78, 216, 0.3);
+  --glow-2: rgba(8, 145, 178, 0.24);
+  --card-grad: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f6fb;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-2: #eef1f8;
+  --surface-solid: #ffffff;
+  --border: rgba(15, 23, 42, 0.09);
+  --border-strong: rgba(15, 23, 42, 0.16);
+  --text: #0f172a;
+  --muted: #5b6478;
+  --faint: #d5dbe7;
+  --accent: #2563eb;
+  --accent-2: #0891b2;
+  --on-accent: #ffffff;
+  --accent-soft: rgba(37, 99, 235, 0.1);
+  --cc-0: #2563eb;
+  --cc-1: #0d9488;
+  --cc-2: #db2777;
+  --ok: #059669;
+  --bad: #dc2626;
+  --warn: #d97706;
+  --glow-1: rgba(147, 197, 253, 0.35);
+  --glow-2: rgba(103, 232, 249, 0.28);
+  --card-grad: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+  --shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+}
+
+:root {
+  --font-sans: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --accent-grad: linear-gradient(135deg, var(--accent), var(--accent-2));
+  --pool-grad: linear-gradient(135deg, color-mix(in srgb, var(--accent) 90%, transparent), color-mix(in srgb, var(--accent-2) 75%, transparent));
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+  --topbar-h: 64px;
+  --sidebar-w: 280px;
+  --content-max: 1180px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 380ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+}

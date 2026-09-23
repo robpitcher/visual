@@ -1,0 +1,162 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  summary: string;
+  breadcrumb?: string[];
+  updated: Date;
+}
+
+const { title, summary, breadcrumb = [], updated } = Astro.props;
+const formatted = new Intl.DateTimeFormat('en', { month: 'long', day: 'numeric', year: 'numeric' }).format(updated);
+---
+
+<Base title={title} description={summary}>
+  <article class="content-frame topic" data-pagefind-body>
+    {breadcrumb.length > 0 && (
+      <nav class="topic__breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          {breadcrumb.map((item, index) => (
+            <li>
+              {item}
+              {index < breadcrumb.length - 1 && <span aria-hidden="true">›</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <header class="topic__header">
+      <h1>{title}</h1>
+    </header>
+
+    <div class="topic__content">
+      <slot />
+    </div>
+
+    <p class="topic__updated" data-pagefind-ignore>Updated {formatted}</p>
+  </article>
+</Base>
+
+<style>
+  .topic {
+    max-width: 1072px;
+  }
+
+  .topic__breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    list-style: none;
+    padding: 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .topic__breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .topic__header {
+    margin-top: 24px;
+    max-width: 880px;
+  }
+
+  h1 {
+    color: var(--text);
+    font-size: clamp(2.2rem, 4.4vw, 3.25rem);
+    font-weight: 750;
+    letter-spacing: -0.032em;
+    line-height: 1.04;
+    text-wrap: balance;
+  }
+
+  .topic__content {
+    margin-top: 22px;
+  }
+
+  .topic__content :global(> p:first-child) {
+    max-width: 760px;
+    color: var(--muted);
+    font-size: clamp(1.08rem, 1.8vw, 1.25rem);
+    line-height: 1.55;
+  }
+
+  .topic__content :global(.fact-grid) {
+    margin-top: 28px;
+  }
+
+  /* Visual islands render as display: contents, so space their root element. */
+  .topic__content :global(> astro-island > *),
+  .topic__content :global(> section) {
+    margin-top: 32px;
+  }
+
+  .topic__content :global(> h2) {
+    margin-top: 44px;
+    color: var(--text);
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .topic__content :global(> ul) {
+    margin: 16px 0 0;
+    padding-left: 1.2rem;
+    color: var(--muted);
+  }
+
+  .topic__content :global(> ul > li + li) {
+    margin-top: 8px;
+  }
+
+  .topic__content :global(.sources) {
+    margin-top: 42px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  .topic__content :global(.sources h2) {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 760;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .topic__content :global(.sources ul) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .topic__content :global(.sources a) {
+    color: var(--muted);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .topic__content :global(.sources a:hover) {
+    color: var(--accent);
+  }
+
+  .topic__updated {
+    margin-top: 28px;
+    color: var(--muted);
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 640px) {
+    .topic__header {
+      margin-top: 18px;
+    }
+  }
+</style>

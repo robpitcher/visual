@@ -1,0 +1,185 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../lib/url';
+
+const topics = (await getCollection('topics')).sort((a, b) => {
+  const category = a.data.category.localeCompare(b.data.category);
+  return category || a.data.order - b.data.order || a.data.title.localeCompare(b.data.title);
+});
+
+const groups = new Map<string, typeof topics>();
+for (const topic of topics) {
+  const group = groups.get(topic.data.category) ?? [];
+  group.push(topic);
+  groups.set(topic.data.category, group);
+}
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const topicHref = (id: string) => withBase(`/${id}/`);
+---
+
+<aside id="site-sidebar" class="sidebar" data-sidebar aria-label="Contents">
+  <div class="sidebar__scroll">
+    <p class="sidebar__label">Contents</p>
+    <nav aria-label="Topic table of contents">
+      {[...groups.entries()].map(([category, items]) => (
+        <details class="sidebar__group" open>
+          <summary>{category}</summary>
+          <ol>
+            {items.map((topic) => {
+              const href = topicHref(topic.id);
+              const active = currentPath === href.replace(/\/$/, '');
+              return (
+                <li>
+                  <a class:list={['sidebar__link', { 'is-active': active }]} href={href} aria-current={active ? 'page' : undefined}>
+                    {topic.data.navTitle ?? topic.data.shortTitle ?? topic.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </details>
+      ))}
+    </nav>
+  </div>
+  <footer class="sidebar__footer">{topics.length} {topics.length === 1 ? 'topic' : 'topics'}</footer>
+</aside>
+
+<style>
+  .sidebar {
+    position: fixed;
+    inset: var(--topbar-h) auto 0 0;
+    z-index: 40;
+    width: var(--sidebar-w);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-right: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-solid) 42%, transparent);
+    backdrop-filter: blur(16px);
+  }
+
+  .sidebar__scroll {
+    overflow-y: auto;
+    padding: 38px 24px 24px;
+  }
+
+  .sidebar__label {
+    margin: 0 0 16px 4px;
+    color: var(--muted);
+    font-size: 0.73rem;
+    font-weight: 780;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .sidebar__group {
+    margin: 0 0 20px;
+  }
+
+  .sidebar__group summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 0.92rem;
+    font-weight: 760;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .sidebar__group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sidebar__group summary::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .sidebar__group:not([open]) summary::before {
+    transform: rotate(-45deg);
+  }
+
+  ol {
+    position: relative;
+    list-style: none;
+    margin: 10px 0 0 16px;
+    padding: 0 0 0 10px;
+  }
+
+  ol::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .sidebar__link {
+    position: relative;
+    display: block;
+    margin: 2px 0;
+    padding: 7px 8px 7px 12px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .sidebar__link:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .sidebar__link.is-active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 720;
+  }
+
+  .sidebar__link.is-active::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 7px;
+    bottom: 7px;
+    width: 3px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-grad);
+  }
+
+  .sidebar__footer {
+    margin: 0 24px;
+    padding: 20px 4px 28px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 960px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform var(--dur) var(--ease);
+      background: var(--surface-solid);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    body[data-sidebar='open'] .sidebar {
+      transform: translateX(0);
+    }
+  }
+
+  @media (max-width: 390px) {
+    .sidebar {
+      width: min(var(--sidebar-w), 86vw);
+    }
+  }
+</style>

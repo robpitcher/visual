@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import SearchModal from '../components/SearchModal.svelte';
+import Sidebar from '../components/Sidebar.astro';
+import Topbar from '../components/Topbar.astro';
+import { withBase } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Visual Aids',
+  description = 'Interactive diagrams that explain cloud, AI and developer tooling concepts.',
+} = Astro.props;
+
+const pageTitle = title === 'Visual Aids' ? title : `${title} · Visual Aids`;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0e19" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          document.documentElement.dataset.theme = stored || (prefersLight ? 'light' : 'dark');
+        } catch {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <Topbar />
+      <Sidebar />
+      <div class="sidebar-backdrop" data-sidebar-backdrop></div>
+      <main id="main-content" class="site-main">
+        <slot />
+      </main>
+      <SearchModal client:load />
+    </div>
+    <script is:inline>
+      (() => {
+        const body = document.body;
+        const toggle = document.querySelector('[data-sidebar-toggle]');
+        const backdrop = document.querySelector('[data-sidebar-backdrop]');
+        const sidebar = document.getElementById('site-sidebar');
+
+        const setOpen = (open) => {
+          body.dataset.sidebar = open ? 'open' : '';
+          toggle?.setAttribute('aria-expanded', String(open));
+          if (sidebar) sidebar.inert = !open && window.matchMedia('(max-width: 960px)').matches;
+        };
+
+        toggle?.addEventListener('click', () => setOpen(body.dataset.sidebar !== 'open'));
+        backdrop?.addEventListener('click', () => setOpen(false));
+        window.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') setOpen(false);
+        });
+        window.addEventListener('resize', () => {
+          setOpen(body.dataset.sidebar === 'open' && window.matchMedia('(max-width: 960px)').matches);
+        });
+        setOpen(false);
+      })();
+    </script>
+  </body>
+</html>
