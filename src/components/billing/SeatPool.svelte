@@ -443,7 +443,7 @@
 
   .mechanism {
     display: grid;
-    grid-template-columns: minmax(13rem, 1fr) minmax(11rem, 0.72fr) minmax(3.8rem, 0.18fr) minmax(20rem, 1.75fr);
+    grid-template-columns: minmax(13rem, 1fr) minmax(11rem, 0.72fr) minmax(3.8rem, 0.18fr) minmax(18rem, 1.45fr);
     gap: clamp(1rem, 2vw, 1.8rem);
     align-items: start;
     margin-top: 2rem;
@@ -635,15 +635,33 @@
 
   .split-pool {
     display: grid;
-    grid-template-rows: 30fr 15fr 5fr;
+    min-height: 15.75rem;
+    grid-template-rows: 15fr 9fr 5fr;
     padding: 0.38rem;
     transition: grid-template-rows var(--dur) var(--ease);
+  }
+
+  .split-pool:not(.capped) .segment-content {
+    min-height: 100%;
+    align-content: center;
+    gap: 0.26rem;
+    padding-block: clamp(0.42rem, 0.9vw, 0.62rem);
+  }
+
+  .split-pool:not(.capped) .segment strong {
+    font-size: clamp(0.9rem, 1.7vw, 1rem);
+  }
+
+  .split-pool:not(.capped) .segment span,
+  .split-pool:not(.capped) .segment p {
+    font-size: 0.78rem;
   }
 
   .split-pool.capped {
     gap: 0.6rem;
     border-color: transparent;
     background: transparent;
+    overflow: visible;
     padding: 0;
   }
 
@@ -688,12 +706,9 @@
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 0;
-    width: 100%;
-    border-radius: calc(var(--radius-sm) - 4px);
+    width: calc(var(--used-scale) * 100%);
+    border-radius: calc(var(--radius-sm) - 2px);
     background: linear-gradient(100deg, color-mix(in srgb, var(--center-color) 98%, transparent), color-mix(in srgb, var(--center-color) 62%, var(--surface-solid)));
-    transform: scaleX(var(--used-scale));
-    transform-origin: left center;
-    transition: transform var(--dur) var(--ease);
   }
 
   .segment-content {
@@ -775,6 +790,12 @@
     grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
+  @container (min-width: 901px) {
+    .split-pool:not(.capped) {
+      height: 17.25rem;
+    }
+  }
+
   .explainer {
     display: flex;
     gap: 0.8rem;
@@ -849,6 +870,11 @@
     .pool-box {
       min-height: 17rem;
     }
+
+    .split-pool {
+      min-height: 14.5rem;
+    }
+
   }
 
   @container (max-width: 620px) {
@@ -902,6 +928,10 @@
 
     .pool-box {
       min-height: 15.5rem;
+    }
+
+    .split-pool {
+      min-height: 13.5rem;
     }
 
     .single-pool > div {
@@ -976,6 +1006,10 @@
 
     .pool-box {
       min-height: 14.5rem;
+    }
+
+    .split-pool {
+      min-height: 12.75rem;
     }
 
     .single-pool strong {
